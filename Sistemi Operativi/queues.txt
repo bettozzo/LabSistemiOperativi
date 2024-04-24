@@ -1,0 +1,47 @@
+MESSAGE QUEUEUS
+
+metodo più completo per comunicare -> più strutturata e più controllo!
+       	   	    		   -> chiede più dettagli :(
+
+lista concatenate salvate in kernel e con ID (aka Queue identifier)
+
+modalità messagistica autosincrona: lettura attende presenza messaggi
+	 	      		    scrittura attende di avere spazio disponibile
+
+due ID (che sono color coded nelle slide):
+    key:
+	-"superfluo"
+	-univoca, ma condivisa con più processi per riconoscere quali risorse sono condivisi tra loro => stessa chiave -> stesse risorse
+	-identifica insieme risorse condivisibili del kernel (semafori, mem, code)
+	-individua coda 
+	
+    Queueu Identifier:
+    	- id univoco
+	- usato per interagire con coda
+
+
+CREAZIONE CODA:
+	  int msgget(key_t key, int msgflg)
+	      return QUEUEUE_ID basata su key
+
+	  msgflg = IPC_CREAT ->crea se non esiste, altrimenti return ID
+	  	   IPC_EXCL  -> combo con IPC_CREAT, fallise se coda esite già
+		   0xxx	     -> analoghi a file system
+Es:
+		      queueKey = 56;
+   int queueuID = msgget(queueKey, 0777 | IPC_CREAT | IPC_EXCL)
+
+
+OTTENERE CHIAVE UNIVOCA:
+	 key_t ftok(char* path, int id)
+	       return key
+	 <path, id> -> seed generatore random di numeri, univoco -> solo due processi che usano stesso path e stesso id usano stesse risorse
+	 path = cartella/file esistente
+	 id != key/Queue_id
+	 che succede se file viene eliminato e poi ricreato? boh, non è sicuro sia lo stesso <path, id>
+
+	  
+
+	      
+	     
+	  	

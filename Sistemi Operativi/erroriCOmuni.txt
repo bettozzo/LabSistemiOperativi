@@ -1,0 +1,20 @@
+int main(){
+    printf("ciao ");
+    int result = fork();
+    if(result == 0){
+    	      printf("child")
+	      return 0;
+	 }
+	 else{
+	 	 printf("parent");
+	 }
+	 return 0;
+}
+
+stampa due volte "ciao " perché non ha '\n', quindi "ciao" va in un buffer/stream. Per stampare e liberare buffer serve "\n". Quindi il figlio ha lo stesso stream del padre con "ciao " dentro.
+
+-----------------------------------------------------------------------
+aprire file con O_WRONLY (o simili) cancella contenuti precedenti nel file. Aprire con O_WRONLY | O_APPEND
+-------------------------------------------------------------------------------
+signal(segnale, handler) è deprecata! si usi: sigaction (lezione dei segnali)
+signal ti torna all'handler di default alla fine della prima esecuzione :-1:

@@ -1,0 +1,15 @@
+PIPE ANONIMA:
+     è il "|" nel terminal di Linux
+     connette stdin e stdout/stderr di 2 programmi -> output primo => input secondo
+     	      	      	     	       	 	      vengono eseguito allo stesso tempo (progr. aspettano input di solito)
+     						      "|" = stdout
+						      "|&"= stdout e stderr
+    per interagire con buffer tra pipe si usano File Descirptios (1 lettura, 1 scrittura)
+    numero pipe possibili limitato da SO
+
+    int read(int fd[0], char* data, int num)
+    	return = n° bytes letti o '0' se lato scrittura è stato chiuso
+	num = n° bytes letti
+	data = dove salva dati
+	
+					       					

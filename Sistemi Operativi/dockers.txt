@@ -1,0 +1,24 @@
+Docker -> tecnologia di virtualizzazione
+       -> emula Sistema operativo
+       -> non si basa su "macchina" (come virtual machine), ma su "containers"
+       -> virtualizziamo applicazione e non sistema-hardware intero
+       -> leggero e veloce, ma meno sicuro di VM
+       -> condivisione di Kernel e non di hardware
+
+basato su linux -> su linux -> tutto ok!
+       	  	-> su windows -> originariamente: Hyper-V per fare VM con linux per eseguire Docker
+		      	      -> ora: docker usa kernel linux con WSL2
+		-> su MacOS -> kernel linux virtualizzato tramite xhyve hypervisor
+
+"Immagine"  -> insieme di istruzioni per creazione container
+	    -> plugin/applicazioni/...
+	    -> container diversi basati su stessa immagine sono indipendenti
+"Container" -> ambiente virtualizzati gestiti da Docker
+	    -> si possono distruggere, ricereare, avviati e fermati  
+
+
+docker attach <container> -> per riconnettersi a container che è partito con -d
+-p <porta> 	  -> dici che porta utilizzare, poi fai localhost:<porta> e vedi i contenuti
+
+
+

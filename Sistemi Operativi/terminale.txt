@@ -1,0 +1,144 @@
+COMANDI UTILI:
+	pwd	-> curr dir
+	ls -l  	-> mostra anche permessi e altro
+	ls -a 	-> mostra file nascosti
+	wc    	-> word count
+	date	-> stampa data
+	echo	-> printf()
+	alias	-> "deprecato", setti comandi che emulino altri comandi
+		-> ciao="Echo ciao" -> scrivi "ciao" in terminale ed esegue echo
+		-> temporanei, per salvarli vanno inseriti in bash.arc
+	unalias	-> cancella comando alias
+	test	-> confronto logico tra 2 op.
+		-> mette risultato in codice di uscita, non video
+		-> si vede con "echo $?"
+	read 	-> assegna valore a variabile
+	chown 	-> cambia permessi su ...
+	chmod	-> cambia permessi su ...
+	cp 	-> copia file
+	move 	-> sposta file
+	type	-> tipologia comando che eseguiamo
+	grep 	-> cerca parole, e ritorna righe che soddisfano
+		-> echo ciao come stai | grep ciao
+	function -> usato per scripts
+
+
+COSE BUFFE:
+     0 - true
+     1+ - false
+
+Redirezionamento di base:
+'>':
+	ls 1>/tmp/out.txt 2>/tmp/err.
+	canale 1 = stdout
+	canale 2 = stderr
+	a video non mostra nulla, e salva risultato nei file
+	
+	ls <name> 1>/tmp/all.txt 2>&1
+	redireziona 2 in qualsiasi posto in cui ridezioni 1
+
+	echo "ciao" > tmp.txt
+	salva "ciao" in file tmp.txt
+
+'<' -> command<file.txt -> invia a command il contenuto di file.txt
+'<>' -> apre file in read-write
+'>>' -> come '>', ma con append
+'<<' -> rende interattivo ciò che non dovrebbe esserlo
+     	"cat << eof
+	[interazione]
+	eof"
+'<<<'-> rende non interattivo ciò che dovrebbe esserlo
+	"read abc <<< "come stai"" -> assegna ad abc valore "come stai", senza aspettare interazione
+
+SOPPRESSIONE OUTPUT:
+	     si incanala su /dev/null
+	     type command 1>/dev/null 2>[...]
+
+
+VARIABILI:
+	utilizzate principalmente in scripts (tranne var. ambiente)
+	set -> con "read"
+	       con var=val (senza spazi)
+	get -> $var
+	    -> ${var}txt -> stampa contenuto di "var" e appende "txt"
+	export -> permetto a sottoprogrammi di utilizzare variabile
+
+	VARIABILI D'AMBIENTE:
+	SHELL -> contiene riferiemnto a shell che si utilizza (bash)
+	PATH  -> contiene directory dei file installati su sistema
+	TERM  -> tipologia terminale corrente (non lo vediamo)
+	PWD   -> aggiornata con ogni "cd"
+	PS1   -> prompt(parte prima del comando) + opzioni stile
+	HOME  -> cartella principale utente corrente
+
+	$PATH
+	installazione è subordinato a concetto di "PATH"
+	serie di cartelle, intervallate da ":"
+	contiene eseguibili eseguibili senza dover specificare tutto percorso (command della shell)
+	installato: richiamabile senza specificare percorso assoluto (anche cartella che contiene quel file è in PATH)
+
+	$$ -> var "$",
+	      ID del processo
+	$? -> codice di ritorno di ultimo comando eseguito
+	
+	
+ARRAY:
+	definizione lista=("a" 1 "oaues" 23 4) SEPARATI DA SPAZI
+	eterogenei
+	get completo: ${lista[@]}
+	get singolo: ${lista[x]}
+	lista indici: ${!lista[@]}
+	dimensione: ${#lista[@]}
+	set : lista[x]=val	indici non DEVONO essere incrementali(0 1 2 3 65 100)
+	append: lista+=(val)
+	sub-array: ${lista[@]:start:length}
+
+
+
+PROCESSO ESECUZIONE COMANDI:
+	   1.sostituzione caratteri speciali
+	   2.sostituzione variabili -> echo $abc ---> echo 123 ---->OUTPUT:123
+	   3.sostituzione subshell (che boh, non l'abbiamo ancora visto)
+
+CONCATENAZIONE DI COMANDI:
+	       guardare slide
+
+
+
+OPERATORI DI PIPING:
+	  cm1 [| / |&] cm2
+	  | -> solo stdout
+	  |& -> stdout e stderr
+
+SUBSHELL:
+	eseguono comandi in maniera indipendente
+	SINTASSI: (<comandi>)
+	output rimandato a shell principale
+	per utilizzare(catturare) output da sottoshell si fa $(cmd..)
+
+
+
+	
+ESPANSIONE ARITMETICA
+	si usano doppie parentesi tonde (( ... ))
+	si usano per operazioni artimetiche che su bash non hanno senso
+	((a++)), (( a < 10 )), (( a = 3<10?1:0 )), (( c+a )) ....
+	su bash non hanno senso ++, <, coso terziario
+
+CONFRONTI LOGICI
+	  test e [ ... ] sono equivalenti, si usano: -eq, -ne, -lt, ...
+	  per stringhe cose cambiano un po, guardare slide!
+	  [[ ... ]] -> sono solo per bash e permettono cose più belle (per interi). Si usano: ==, !=, <, ...
+	     	    -> operatori unari -> -f, è un file?
+		       		       -> -e, esiste?
+				       -> -d, è una cartella?
+				       -> [[ {!} {-f|-e|-d} <percorso> ]]
+	  
+
+
+
+
+
+
+
+

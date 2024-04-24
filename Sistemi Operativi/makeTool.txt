@@ -1,0 +1,38 @@
+make permette di fare operazioni complicate in modo semplice!
+compilazione automatica e selettiva di progetti
+serve a non compilatore tutte cose ogni volta!
+      compilo solo se sorgenete è stato modificato
+      
+simile a bash, ma compila solo necessari
+
+esegue "makefile" che contengono info utili per compilazione
+
+SINTASSI:
+
+	<target>: <prerequisite>
+	    <recipe/rule>
+	    <recipe/rule>
+		.
+		.
+	    	.
+
+ESEMPIO
+
+	target1: target2 target3
+	    rule (3)
+	    rule (4)
+
+
+	target2: target3
+	   rule (1)
+
+	target3:
+	   rule (2)
+
+
+
+
+Posso eseguire anche solo dei target
+le rule/recipe sono indipendenti tra loro (se faccio rule1=cd ..., in rule2 la pwd non cambia)
+rule=comandi bash
+ricette iniziano con TAB

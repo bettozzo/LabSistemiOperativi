@@ -1,0 +1,10 @@
+GCC = Gnu Compiler Collection
+crea eseguibili per linux (.out), ed è Open Source
+
+
+4 fasi:
+	1. Pre-Processor (-E)	 -> include headers e robe simili (.i)
+	2. Compiler (-S)	 -> genere codice assembly (.s)
+	3. Assembler (-C)	 -> prende assembly e scrive codice macchina (.o)
+	4. Linker	 	 -> collega librerie e file .o diversi (.out)
+gcc [-E/-S/-c] -o <.c> <file dopo>

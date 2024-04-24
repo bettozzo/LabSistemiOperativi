@@ -1,0 +1,10 @@
+Perchè C? -> poche parole chiavi
+       	  -> efficente
+	  -> molto usato per sistemi operativi
+	  -> basso livello
+	  -> pieno controllo del programma e sue risorse!
+
+
+usare variabili che occupano lo spazio giusto!
+
+	  

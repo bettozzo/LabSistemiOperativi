@@ -1,0 +1,44 @@
+SEGNALI
+
+in UNIX
+eventi asincroni alla normale esecuzione del programma
+programma può rispondere quando riceve segnale -> esecuzione non lineare!
+solo Kernel consegna segnali, programma decide se/come rispondere
+Kernel unica che manda perché ci sono segnali che chiudono processi, altrimenti programma A potrebbe chiudere tutti gli altri programmi senza nessun controllo (Kernel controlla privilegi)
+
+due liste:
+    -Pending signals:
+    	     ->seganli emessi da kernel che processo deve ancora gestire
+    -Blocked signals:
+    	     ->segnali che non devono essere comunicati al processo
+
+segnali = "software interrupts"
+gestione segnale:
+	 -eseguire l'azione default
+	 -ignorandolo (se possibile)	   -> programma esegue normalmente
+	 -eseguendo handler personalizzato -> programma si interrompe
+
+
+AZIONE DI DEFAULT:
+       <slide 9-15, lezione6>
+
+
+in <signals.h>
+sighandler_t signal(int signum, sighandler_t handler);
+imposta "handler" come handler del segnale corrispondete a signum
+handler -> SIG_DFL [di default], SIG_IGN [ignora segnale], void nomeFunz(int signum) [custom handler]
+   
+   
+per inviare segnale
+int kill(pid_t pid, int sig); //kill != fine processo, nome è messo male
+pid > 0 -> manda segnale a pid indicato
+pid = 0 -> segnale ad ogni processo dello stesso gruppo
+pid = -1 -> segnale a TUTTO!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+pid < -1 -> segnale ad ogni processo di |pid|
+
+uint alarm(uint seconds);//mandami SIGALRM tra "seconds" secondi
+seconds = 0 -> reset alarms
+
+NON È DETERMINISTUCO!!
+
+	

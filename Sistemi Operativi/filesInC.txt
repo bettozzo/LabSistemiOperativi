@@ -1,0 +1,104 @@
+stream -> forniscono strumenti(formattazione, buffers, più user friendly)
+       -> più facili e di alto livello
+       
+file descriptors -> crudi e di basso livello
+     		 -> maggior controllo, ma dobbiamo fare cose più complesse!
+
+-------------
+SINTASSI  per streams:
+
+FILE* fopen(char* name, char* mode);
+mode:	r
+	w
+	r+ (read and write)
+	w+ (read and write. Create or overwrite)
+	a  
+	a+ (read and append)
+	
+int fclose(FILE* stream);
+
+int fgetc(FILE* stream);
+    legge un carattere
+    
+char* fgets(char* str, int n, FILE*);
+      		  restituisce riga e salva in str
+		  si ferma a: n-1, "\n" e eof
+    
+int fscanf(FILE* stream, char* format);
+    legge da stream i dati salvando dati nelle variabili
+    segue formato di format
+    
+int feof(FILE* stream);
+    return 1 se finisce
+
+int fputc(int char, FILE*);
+    scrive char su file
+    
+int fputs(char* str, FILE*);
+    scrive str su file
+    
+int fprintf(FILE*);
+    scrive su file
+    
+int fflush(FILE*);
+    trascrive il file dallo stream
+    
+void rewind(FILE*);
+     ripristina pos della testina a inzio file
+-------------
+
+
+FILE DESCRIPTORS
+file caratterizzato da un intero (punta a entry nella tabella del SO)
+
+file table:
+_________________
+|0              |
+|    stdin      |
+|               |
+|_______________|
+|1              |
+|   stdout      |
+|               |
+|_______________|
+|2              |
+|   stderr      |
+|               |
+|_______________|
+|       .       |
+|       .       |
+|       .       |
+|_______________|_____
+|99(po' esse' de' più)|
+|	        |⎻⎻⎻⎻⎻
+|               |
+|_______________|
+
+SINTASSI
+int open(char* filepath, int flags, [mode_t mode]);
+flags:
+      Concatenati con |
+      O_RDONLY, O_WRONLY, O_RDWR ->almeno uno è obbligatorio
+      O_CREAT  -> crea (con O_EXCL fallisce se file esiste già)
+      O_APPEND
+      O_TRUNC  -> cancella contenuto file
+
+mode: usati per assegnare permessi a file quando lo si crea con O_CREAT
+      S_[lettere]
+      e.g S_IRUSR
+      2° lettera -> R/W/X
+      3° lettera -> boh
+
+int close(int fd);
+
+ssize_t read(int fd, void *buf, size_t count);
+	legge da file associato a fd e salva in buf fino a count bytes
+	
+ssize_t write(int fd, void *buf, size_t count);
+	scrive su file associato a fd fino a count bytes di buf
+
+off_t lseek(int fd, off_t offset, int whence);
+      	riposiziona offset del file di offset partendo da whence
+	whence= 1.SEEK_SET -> da inizio file
+		2.SEEK_CUR -> da pos attuale
+		3.SEEK_END -> dalla fine file
