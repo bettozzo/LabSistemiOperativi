@@ -1,0 +1,10 @@
+a.out
+binary1.out
+binary2.out
+es1-callOtherBinaries.c
+es2-callBinariesSaveOutput.c
+es3-lsGrepWc.c
+otherBinary1.c
+otherBinary2.c
+output.txt
+  9   9 139
