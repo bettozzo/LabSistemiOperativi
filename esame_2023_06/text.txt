@@ -1,0 +1,5 @@
+kill SIGUSR1 155
+queue SIGUSR1 155
+fifo SIGUSR1 155
+queue SIGUSR1 155
+kill SIGUSR1 155

@@ -8,3 +8,5 @@ CMD cd /home/labOS && bash
 
 # WINDOWS:
 # docker run -ti --rm --name="labOS" --privileged -v /:/host -v "%cd%:/home/labOS" --hostname "labOS" labos/ubuntu
+
+# docker exec -it labOS bash
