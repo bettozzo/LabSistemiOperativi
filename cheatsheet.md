@@ -1,13 +1,25 @@
+# Doc
+
+[man7 documentazione](https://man7.org/linux/man-pages/dir_all_alphabetic.html)
+
 # Librerie
 
 ```c
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+
 #include <unistd.h>
 #include <fcntl.h>
+#include <errno.h>
+#include <signal.h>
+#include <pthread.h>
+
 #include <sys/wait.h>
 #include <sys/ipc.h>
 #include <sys/msg.h>
+#include <sys/stat.h>
+#include <sys/types.h>
 ```
 
 # Bash
@@ -37,6 +49,10 @@ build:
 ```
 
 # FILE
+
+```c
+remove("file_path"); //cancella file
+```
 
 ### file stream
 
@@ -76,11 +92,12 @@ dup2(fd, stdout);
 
 # Fork
 
-0 -> child
-1 -> parent
+**0** -> child <br>
+**other** -> parent
 
 ```c
-getppid(); //parent pid
+getpid(); // own pid
+getppid(); // parent pid
 
 //aspetta tutti i figli
 while(wait(NULL)>0);
@@ -91,11 +108,11 @@ waitpid(pid, NULL, 0); //pid == -1 -> un figlio qualisisi
 
 # Segnali
 
-### handler
+### Handler
 
 ```c
 struct sigaction sa;
-sa.sa_handler = HANDLER_FUNZ;
+sa.sa_sigaction = HANDLER_FUNZ;
 sa.sa_flags = SA_SIGINFO;
 //se si resetta dopo il primo signale ->
 //    sa.sa_flags = SA_RESETHAND | SA_SIGINFO;
@@ -160,19 +177,17 @@ da **key**, ottengo **queue identifier**.<br>
 
 ```c
 //** creazione **
-flags = 0777 | IPC_CREAT | IPC_EXCL
-int queueuID = msgget(key, flags);
-//key univoca, basata su PATH.
-//coppia <path, id> dovrebbe dare stessa key.
 int key = ftok(path, id);
+int queueuID = msgget(key, flags);
+//flags = 0777 | IPC_CREAT | IPC_EXCL
 
 //messaggio della coda ha forma:
 struct msg_buffer{
     long mtype;
-     // customizzabile
-        char mtext[100];
-    //può essere anche struttura dati:
-        Book mtext;
+
+    char mtext[100];
+    //può essere anche altro:
+    //i.e: Book mtext;
 } message;
 
 //** lettura **
@@ -183,5 +198,101 @@ msgrcv(queueueID, salvaQui, size, msgtyp, flags);
 
 //** scrittura **
 msgsnd(queueuID, str, dim, flags)
-
 ```
+
+# Threads
+
+per compilare bisogna aggiungere flag `-pthread`
+
+```bash
+gcc main.c -pthread
+```
+
+### Creazione
+
+```c
+pthread_t threadId;
+pthread_create(&threadId, attr, funz_da_eseguire, (void*) &args)
+```
+
+### Terminazione
+
+5 possibilità
+
+```c
+pthread_exit(retVal);
+
+return retVal;
+
+pthread_cancel(threadId);
+
+exit()
+
+*main_thread_finishes*
+```
+
+### Cancellazione di un thread
+
+un thread puà inviare una richiesta per cancellare un altro thread. <br>
+altro thread risponderà in base a **state** e **type**
+
+- state = se thread deve terminare quando riceve richiesta
+- type = come deve termina
+
+```c
+pthread_setcancelstate(int state, int* oldstate);
+//state = PTHREAD_CANCEL_ENABLE (default)
+//state = PTHREAD_CANCEL_DISABLE
+
+pthread_setcanceltype(int type, int* oldtype);
+//type = PTHREAD_CANCEL_DEFERRED (default)
+    // terminazione aspetta cancellation point
+    // https://man7.org/linux/man-pages/man7/pthreads.7.html
+
+//type = PTHREAD_CANCEL_ASYNCHRONOUS
+    // terminazione appena riceve richiesta
+```
+
+### Aspettare thread | Join
+
+thread può essere aspettato da massimo un altro thread
+
+```c
+void* retVal; //deve essere void*
+pthread_join(threadId, &retVal);
+```
+
+Non tutti thread possono essere aspettati
+
+```c
+pthread_detach(threadId); //makes thread unjoinable
+```
+
+### Attributi
+
+```c
+pthread_attr_t attr;
+pthread_attr_init(&attr); //default init
+pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
+pthread_attr_getdetachstate(&attr, &detachSTate);
+// ...
+pthread_create(&t_id, &attr, my_fun, NULL); //attach attr to thread
+pthread_attr_destroy(&attr); //Destructor
+```
+
+# Testing from bash
+
+- trap signals
+  `trap "<comando_bash>" <segnale>` + `Ctrl+C`
+
+- vedere PID terminale
+  `echo $$`
+
+- mandare messaggio su fifo/pipe
+  `echo -n "msg" > file_fifo`
+
+- controllare se file è una fifo
+  `ls -lp` e guardare per `prw--------`
+
+- lista code
+  `ipcs -q`
